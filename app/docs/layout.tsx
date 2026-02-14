@@ -26,7 +26,7 @@ export default async function DocsLayout({ children }: { children: ReactNode }) 
       }
       footer={
         <Footer>
-          MIT {new Date().getFullYear()} OpenFolio
+          AGPL-3.0 {new Date().getFullYear()} OpenFolio
         </Footer>
       }
       search={<Search />}
