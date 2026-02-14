@@ -16,9 +16,9 @@ const features = [
   },
   {
     icon: Mail,
-    title: "Email & Calendar Sync",
+    title: "Google Integration",
     description:
-      "Connect Gmail and Google Calendar to automatically import interactions and keep your CRM up to date.",
+      "Connect Gmail and Google Calendar to automatically import interactions. More integrations coming soon.",
   },
   {
     icon: Search,
@@ -34,9 +34,9 @@ const features = [
   },
   {
     icon: Puzzle,
-    title: "Extensible Connectors",
+    title: "Extensible Architecture",
     description:
-      "Import from CSV, LinkedIn, or build your own connector. The modular gateway makes it easy to add new data sources.",
+      "Import from CSV today. The modular connector gateway makes it easy to add new data sources over time.",
   },
   {
     icon: Server,

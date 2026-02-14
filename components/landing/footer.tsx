@@ -17,6 +17,20 @@ export function Footer() {
             GitHub
           </a>
           <Link
+            href="/docs"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Docs
+          </Link>
+          <a
+            href="https://github.com/orgs/unlatch-ai/projects/1"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-muted-foreground hover:text-foreground"
+          >
+            Roadmap
+          </a>
+          <Link
             href="/login"
             className="text-muted-foreground hover:text-foreground"
           >

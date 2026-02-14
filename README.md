@@ -131,6 +131,10 @@ See [.env.example](.env.example) for all available variables. Key ones:
 | `GOOGLE_CLIENT_SECRET` | No | For Gmail/Calendar sync |
 | `INTEGRATION_ENCRYPTION_KEY` | No | For storing OAuth tokens |
 
+## Roadmap
+
+See the [public roadmap](https://github.com/orgs/unlatch-ai/projects/1) for planned features and upcoming work.
+
 ## Documentation
 
 - [Self-Hosting Guide](https://openfolio.ai/docs/self-hosting)

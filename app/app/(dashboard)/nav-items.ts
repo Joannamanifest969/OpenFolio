@@ -1,4 +1,5 @@
 import {
+  BookOpen,
   Building2,
   Home,
   MessageSquare,
@@ -14,4 +15,5 @@ export const navItems = [
   { href: "/app/interactions", label: "Interactions", icon: MessageSquare },
   { href: "/app/ask", label: "Ask AI", icon: Sparkles },
   { href: "/app/search", label: "Search", icon: Search },
+  { href: "/docs", label: "Docs", icon: BookOpen },
 ];

@@ -20,7 +20,7 @@ export default async function DocsLayout({ children }: { children: ReactNode }) 
     <Layout
       navbar={
         <Navbar
-          logo={<b>OpenFolio</b>}
+          logo={<a href="/"><b>OpenFolio</b></a>}
           projectLink="https://github.com/unlatch-ai/OpenFolio"
         />
       }
