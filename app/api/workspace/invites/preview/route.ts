@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { hashInviteToken, isInviteExpired } from "@/lib/invites";
+import { getRuntimeMode } from "@/lib/runtime-mode";
 
 export async function GET(request: NextRequest) {
   try {
+    if (getRuntimeMode().authMode === "none") {
+      return NextResponse.json({ error: "Invites are disabled in no-auth mode" }, { status: 403 });
+    }
+
     const url = new URL(request.url);
     const token = url.searchParams.get("token");
 
@@ -38,11 +43,13 @@ export async function GET(request: NextRequest) {
       .eq("id", invite.workspace_id)
       .single();
 
-    const { data: inviter } = await supabase
-      .from("profiles")
-      .select("full_name")
-      .eq("id", invite.invited_by)
-      .single();
+    const { data: inviter } = invite.invited_by
+      ? await supabase
+          .from("profiles")
+          .select("full_name")
+          .eq("id", invite.invited_by)
+          .single()
+      : { data: null };
 
     return NextResponse.json({
       workspace: {
