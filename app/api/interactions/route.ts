@@ -87,7 +87,6 @@ export async function GET(request: NextRequest) {
         source_id,
         source_url,
         created_at,
-        updated_at,
         interaction_people(*, people(id, first_name, last_name, email, avatar_url))
       `)
       .eq("workspace_id", ctx.workspaceId);

@@ -33,8 +33,9 @@ export async function processSync(
   // Map email -> person ID for interaction linking
   const emailToPersonId = new Map<string, string>();
 
-  const personEmbeddingPayloads: { payload: { entityType: string; entityId: string; workspaceId: string } }[] = [];
-  const interactionEmbeddingPayloads: { payload: { entityType: string; entityId: string; workspaceId: string } }[] = [];
+  type EmbeddingPayload = { payload: { entityType: "person" | "company" | "note" | "interaction"; entityId: string; workspaceId: string } };
+  const personEmbeddingPayloads: EmbeddingPayload[] = [];
+  const interactionEmbeddingPayloads: EmbeddingPayload[] = [];
 
   // --- Process people ---
   for (const person of result.people) {
