@@ -184,7 +184,7 @@ export function IntegrationCard({
                   Disconnect
                 </Button>
               </>
-            ) : auth === "file" ? null : (
+            ) : auth === "file" || !onConnect ? null : (
               <Button size="sm" onClick={onConnect}>
                 <Power className="mr-1 h-3 w-3" />
                 Connect
