@@ -246,61 +246,6 @@ export type Database = {
           },
         ]
       }
-      duplicate_candidates: {
-        Row: {
-          confidence: number
-          created_at: string | null
-          id: string
-          person_a_id: string
-          person_b_id: string
-          reason: string | null
-          status: string
-          workspace_id: string
-        }
-        Insert: {
-          confidence?: number
-          created_at?: string | null
-          id?: string
-          person_a_id: string
-          person_b_id: string
-          reason?: string | null
-          status?: string
-          workspace_id: string
-        }
-        Update: {
-          confidence?: number
-          created_at?: string | null
-          id?: string
-          person_a_id?: string
-          person_b_id?: string
-          reason?: string | null
-          status?: string
-          workspace_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "duplicate_candidates_person_a_id_fkey"
-            columns: ["person_a_id"]
-            isOneToOne: false
-            referencedRelation: "people"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "duplicate_candidates_person_b_id_fkey"
-            columns: ["person_b_id"]
-            isOneToOne: false
-            referencedRelation: "people"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "duplicate_candidates_workspace_id_fkey"
-            columns: ["workspace_id"]
-            isOneToOne: false
-            referencedRelation: "workspaces"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       import_records: {
         Row: {
           completed_at: string | null
@@ -1603,10 +1548,6 @@ export type Database = {
       extension: { Args: { name: string }; Returns: string }
       filename: { Args: { name: string }; Returns: string }
       foldername: { Args: { name: string }; Returns: string[] }
-      get_common_prefix: {
-        Args: { p_delimiter: string; p_key: string; p_prefix: string }
-        Returns: string
-      }
       get_size_by_bucket: {
         Args: never
         Returns: {
@@ -1631,86 +1572,59 @@ export type Database = {
       }
       list_objects_with_delimiter: {
         Args: {
-          _bucket_id: string
+          bucket_id: string
           delimiter_param: string
           max_keys?: number
           next_token?: string
           prefix_param: string
-          sort_order?: string
           start_after?: string
         }
         Returns: {
-          created_at: string
           id: string
-          last_accessed_at: string
           metadata: Json
           name: string
           updated_at: string
         }[]
       }
       operation: { Args: never; Returns: string }
-      search: {
-        Args: {
-          bucketname: string
-          levels?: number
-          limits?: number
-          offsets?: number
-          prefix: string
-          search?: string
-          sortcolumn?: string
-          sortorder?: string
-        }
-        Returns: {
-          created_at: string
-          id: string
-          last_accessed_at: string
-          metadata: Json
-          name: string
-          updated_at: string
-        }[]
-      }
-      search_by_timestamp: {
-        Args: {
-          p_bucket_id: string
-          p_level: number
-          p_limit: number
-          p_prefix: string
-          p_sort_column: string
-          p_sort_column_after: string
-          p_sort_order: string
-          p_start_after: string
-        }
-        Returns: {
-          created_at: string
-          id: string
-          key: string
-          last_accessed_at: string
-          metadata: Json
-          name: string
-          updated_at: string
-        }[]
-      }
-      search_v2: {
-        Args: {
-          bucket_name: string
-          levels?: number
-          limits?: number
-          prefix: string
-          sort_column?: string
-          sort_column_after?: string
-          sort_order?: string
-          start_after?: string
-        }
-        Returns: {
-          created_at: string
-          id: string
-          key: string
-          last_accessed_at: string
-          metadata: Json
-          name: string
-          updated_at: string
-        }[]
-      }
+      search:
+        | {
+            Args: {
+              bucketname: string
+              levels?: number
+              limits?: number
+              offsets?: number
+              prefix: string
+              search?: string
+              sortcolumn?: string
+              sortorder?: string
+            }
+            Returns: {
+              created_at: string
+              id: string
+              last_accessed_at: string
+              metadata: Json
+              name: string
+              updated_at: string
+            }[]
+          }
+        | {
+            Args: {
+              bucketname: string
+              levels?: number
+              limits?: number
+              offsets?: number
+              prefix: string
+            }
+            Returns: {
+              created_at: string
+              id: string
+              last_accessed_at: string
+              metadata: Json
+              name: string
+              updated_at: string
+            }[]
+          }
     }
     Enums: {
       buckettype: "STANDARD" | "ANALYTICS" | "VECTOR"
