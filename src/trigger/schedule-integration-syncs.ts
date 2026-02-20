@@ -1,6 +1,6 @@
-import { schedules, tasks } from "@trigger.dev/sdk";
+import { schedules } from "@trigger.dev/sdk";
 import { createAdminClient } from "@/lib/supabase/admin";
-import type { syncIntegration } from "./sync-integration";
+import { syncIntegration } from "./sync-integration";
 
 const SCHEDULER_CRON = "*/5 * * * *";
 
@@ -104,8 +104,7 @@ export const scheduleIntegrationSyncs = schedules.task({
       }
 
       try {
-        await tasks.trigger<typeof syncIntegration>(
-          "sync-integration",
+        await syncIntegration.trigger(
           {
             integrationId: integration.id,
             workspaceId: integration.workspace_id,
