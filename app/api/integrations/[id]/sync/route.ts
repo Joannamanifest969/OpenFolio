@@ -35,6 +35,12 @@ export async function POST(
   }
 
   try {
+    await supabase
+      .from("integrations")
+      .update({ status: "syncing", last_sync_error: null })
+      .eq("id", id)
+      .eq("workspace_id", ctx.workspaceId);
+
     await tasks.trigger<typeof syncIntegration>("sync-integration", {
       integrationId: id,
       workspaceId: ctx.workspaceId,

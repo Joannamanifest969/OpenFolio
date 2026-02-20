@@ -4,9 +4,20 @@ import { NextRequest } from "next/server";
 
 const mockHandleCallback = vi.fn();
 const mockGetConnector = vi.fn(() => ({ handleCallback: mockHandleCallback }));
+const mockTrigger = vi.fn();
 
-const mockUpsert = vi.fn().mockResolvedValue({ data: null, error: null });
-const mockFrom = vi.fn(() => ({ upsert: mockUpsert }));
+const mockUpsert = vi.fn();
+const mockSelect = vi.fn();
+const mockSingle = vi.fn();
+const mockUpdate = vi.fn();
+const mockEq = vi.fn();
+const mockFrom = vi.fn(() => ({
+  upsert: mockUpsert,
+  select: mockSelect,
+  single: mockSingle,
+  update: mockUpdate,
+  eq: mockEq,
+}));
 
 vi.mock("@/lib/integrations/registry", () => ({
   getConnector: mockGetConnector,
@@ -18,6 +29,12 @@ vi.mock("@/lib/supabase/admin", () => ({
 
 vi.mock("@/lib/integrations/encryption", () => ({
   encrypt: (value: string) => `enc:${value}`,
+}));
+
+vi.mock("@trigger.dev/sdk", () => ({
+  tasks: {
+    trigger: (...args: unknown[]) => mockTrigger(...args),
+  },
 }));
 
 function createSignedState(payload: Record<string, unknown>, secret: string) {
@@ -37,6 +54,18 @@ describe("Integration OAuth callbacks", () => {
       refreshToken: "refresh-token",
       expiresAt: new Date("2026-02-20T12:00:00Z"),
     });
+
+    let integrationId = 0;
+    mockUpsert.mockImplementation(() => ({ select: mockSelect }));
+    mockSelect.mockImplementation(() => ({ single: mockSingle }));
+    mockSingle.mockImplementation(async () => {
+      integrationId += 1;
+      return { data: { id: `int-${integrationId}` }, error: null };
+    });
+
+    mockUpdate.mockImplementation(() => ({ eq: mockEq }));
+    mockEq.mockResolvedValue({ data: null, error: null });
+    mockTrigger.mockResolvedValue({ id: "run-1" });
   });
 
   it("Google callback upserts gmail/calendar/contacts with workspace-provider conflict", async () => {
@@ -56,7 +85,7 @@ describe("Integration OAuth callbacks", () => {
 
     const response = await GET(request);
     expect(response.headers.get("location")).toBe(
-      "http://localhost:3000/app/settings/integrations?success=google"
+      "http://localhost:3000/app/settings?success=google"
     );
 
     expect(mockUpsert).toHaveBeenCalledTimes(3);
@@ -65,6 +94,13 @@ describe("Integration OAuth callbacks", () => {
     for (const call of mockUpsert.mock.calls) {
       expect(call[1]).toEqual({ onConflict: "workspace_id,provider" });
     }
+
+    expect(mockTrigger).toHaveBeenCalledTimes(3);
+    expect(mockTrigger.mock.calls.map((call) => call[0])).toEqual([
+      "sync-integration",
+      "sync-integration",
+      "sync-integration",
+    ]);
   });
 
   it("Microsoft callback upserts mail/calendar/contacts and stores account info", async () => {
@@ -95,7 +131,7 @@ describe("Integration OAuth callbacks", () => {
 
     const response = await GET(request);
     expect(response.headers.get("location")).toBe(
-      "http://localhost:3000/app/settings/integrations?success=microsoft"
+      "http://localhost:3000/app/settings?success=microsoft"
     );
 
     expect(mockUpsert).toHaveBeenCalledTimes(3);
@@ -111,5 +147,12 @@ describe("Integration OAuth callbacks", () => {
       expect(call[0].account_name).toBe("Ada Lovelace");
       expect(call[1]).toEqual({ onConflict: "workspace_id,provider" });
     }
+
+    expect(mockTrigger).toHaveBeenCalledTimes(3);
+    expect(mockTrigger.mock.calls.map((call) => call[0])).toEqual([
+      "sync-integration",
+      "sync-integration",
+      "sync-integration",
+    ]);
   });
 });

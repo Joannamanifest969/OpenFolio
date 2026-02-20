@@ -36,6 +36,7 @@ function createIntegrationsBuilder() {
   const filters: Array<{ key: string; value: unknown }> = [];
   let selectedColumns: string | null = null;
   let updatePayload: Record<string, unknown> | null = null;
+  let upsertedId: string | null = null;
 
   const builder: Record<string, unknown> = {};
 
@@ -50,12 +51,12 @@ function createIntegrationsBuilder() {
   });
 
   builder.upsert = vi.fn(
-    async (
+    (
       row: Record<string, unknown>,
       options?: { onConflict?: string }
     ) => {
       if (options?.onConflict !== "workspace_id,provider") {
-        return { data: null, error: { message: "Unexpected onConflict" } };
+        throw new Error("Unexpected onConflict");
       }
 
       const existingIndex = db.integrations.findIndex(
@@ -100,7 +101,8 @@ function createIntegrationsBuilder() {
         db.integrations.push(merged);
       }
 
-      return { data: merged, error: null };
+      upsertedId = merged.id;
+      return builder;
     }
   );
 
@@ -110,7 +112,11 @@ function createIntegrationsBuilder() {
   });
 
   builder.single = vi.fn(async () => {
-    const target = db.integrations.find((row) => matchesFilters(row, filters));
+    const target =
+      db.integrations.find((row) => matchesFilters(row, filters)) ||
+      (upsertedId
+        ? db.integrations.find((row) => row.id === upsertedId)
+        : undefined);
     if (!target) {
       return { data: null, error: { code: "PGRST116" } };
     }

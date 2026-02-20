@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getConnector } from "@/lib/integrations/registry";
 import { encrypt } from "@/lib/integrations/encryption";
+import { tasks } from "@trigger.dev/sdk";
+import type { syncIntegration } from "@/src/trigger/sync-integration";
 
 const STATE_MAX_AGE_MS = 10 * 60 * 1000;
 
@@ -72,7 +74,7 @@ export async function GET(request: NextRequest) {
 
   if (error) {
     return NextResponse.redirect(
-      `${appUrl}/app/settings/integrations?error=${encodeURIComponent(
+      `${appUrl}/app/settings?error=${encodeURIComponent(
         `microsoft_${error}`
       )}`
     );
@@ -80,21 +82,21 @@ export async function GET(request: NextRequest) {
 
   if (!code || !stateParam) {
     return NextResponse.redirect(
-      `${appUrl}/app/settings/integrations?error=missing_params`
+      `${appUrl}/app/settings?error=missing_params`
     );
   }
 
   const state = verifyState(stateParam);
   if (!state) {
     return NextResponse.redirect(
-      `${appUrl}/app/settings/integrations?error=invalid_state`
+      `${appUrl}/app/settings?error=invalid_state`
     );
   }
 
   const connector = getConnector("microsoft-mail");
   if (!connector?.handleCallback) {
     return NextResponse.redirect(
-      `${appUrl}/app/settings/integrations?error=connector_unavailable`
+      `${appUrl}/app/settings?error=connector_unavailable`
     );
   }
 
@@ -110,33 +112,73 @@ export async function GET(request: NextRequest) {
       "microsoft-calendar",
       "microsoft-contacts",
     ];
+    const integrationIds: string[] = [];
 
     for (const provider of providers) {
-      await supabase.from("integrations").upsert(
-        {
-          workspace_id: state.workspaceId,
-          user_id: state.userId,
-          provider,
-          access_token_encrypted: encrypt(tokens.accessToken),
-          refresh_token_encrypted: tokens.refreshToken
-            ? encrypt(tokens.refreshToken)
-            : null,
-          token_expires_at: tokens.expiresAt?.toISOString() || null,
-          status: "active",
-          account_email: accountEmail,
-          account_name: accountName,
-        },
-        { onConflict: "workspace_id,provider" }
-      );
+      const { data: integration } = await supabase
+        .from("integrations")
+        .upsert(
+          {
+            workspace_id: state.workspaceId,
+            user_id: state.userId,
+            provider,
+            access_token_encrypted: encrypt(tokens.accessToken),
+            refresh_token_encrypted: tokens.refreshToken
+              ? encrypt(tokens.refreshToken)
+              : null,
+            token_expires_at: tokens.expiresAt?.toISOString() || null,
+            status: "active",
+            account_email: accountEmail,
+            account_name: accountName,
+          },
+          { onConflict: "workspace_id,provider" }
+        )
+        .select("id")
+        .single();
+
+      if (integration?.id) {
+        integrationIds.push(integration.id);
+      }
+    }
+
+    for (const integrationId of integrationIds) {
+      try {
+        await supabase
+          .from("integrations")
+          .update({ status: "syncing", last_sync_error: null })
+          .eq("id", integrationId);
+
+        await tasks.trigger<typeof syncIntegration>(
+          "sync-integration",
+          {
+            integrationId,
+            workspaceId: state.workspaceId,
+          },
+          {
+            idempotencyKey: `initial-sync:${integrationId}`,
+          }
+        );
+      } catch (triggerError) {
+        await supabase
+          .from("integrations")
+          .update({
+            status: "error",
+            last_sync_error:
+              triggerError instanceof Error
+                ? triggerError.message
+                : "Failed to queue initial sync",
+          })
+          .eq("id", integrationId);
+      }
     }
 
     return NextResponse.redirect(
-      `${appUrl}/app/settings/integrations?success=microsoft`
+      `${appUrl}/app/settings?success=microsoft`
     );
   } catch (err) {
     console.error("Microsoft OAuth callback error:", err);
     return NextResponse.redirect(
-      `${appUrl}/app/settings/integrations?error=token_exchange_failed`
+      `${appUrl}/app/settings?error=token_exchange_failed`
     );
   }
 }
